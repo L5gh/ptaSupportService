@@ -1,0 +1,141 @@
+{
+  'parser': 'babel-eslint',
+
+  //'extends': 'airbnb',
+  'extends': 'eslint:recommended',
+  //'extends': ['plugin:react/recommended'],
+
+  'parserOptions': {
+    'ecmaFeatures': {
+      'experimentalObjectRestSpread': true,
+      'jsx': true
+    },
+    'sourceType': 'module'
+  },
+
+  'plugins': ['react'],
+
+  'rules': {
+    // // Node.js v4.x (Argon) でサポートされない ES6 機能を警告する
+    //'node/no-unsupported-features': [2, {'version': 4}],
+    //行間の最大文字数
+    'max-len': [0, 140, 2],
+    //インデントのスペース数
+    'indent': [2, 2, {'SwitchCase': 1}],
+    'linebreak-style': [2, 'unix'],
+    //react/jsx構文のインデントのスペース数
+    'react/jsx-indent': [2, 2],
+    'react/jsx-indent-props': [2, 2],
+    //__
+    'react/jsx-no-target-blank': 0,
+
+    'react/jsx-uses-react': 2,
+    'no-unused-vars': [0, {
+      'vars': 'local',
+      'args': 'all',
+      'varsIgnorePattern': '[iI]gnored'
+    }],
+    'react/display-name': 0,
+    'react/no-string-refs': 2,
+
+    'react/prop-types': 0,
+    //__
+    'react/sort-comp': [2, {
+      'order': [
+        'flow',
+        '/^_.+$/',
+        'static-methods',
+        'lifecycle',
+        'everything-else',
+        'render'
+      ],
+      'groups': {
+        'flow': [
+          'props',
+          'state',
+          'defaultProps'
+        ]
+      }
+    }],
+    // 情報が不十分な JSDoc を警告
+    'valid-jsdoc': [2, {
+      'requireReturn': false
+    }],
+    // 定数式による条件を警告
+    'no-constant-condition': 1,
+    // console メソッドを許可
+
+    'no-console': [
+      1,
+      {
+        allow: [
+          'info',
+          'warn',
+          'error']
+      }
+    ],
+    // alert メソッドを許可
+    'no-alert': 0,
+    // debugger メソッドを注意
+    'no-debugger': 1,
+    // 正規表現におけるスペースの利用を許可
+    'no-regex-spaces': 0,
+    // 連続スペースの許可
+    'no-multi-spaces': 0,
+    'no-mixed-spaces-and-tabs': [2, false],
+    'no-trailing-spaces': 2,
+    // const or let を強制
+    'no-var': 2,
+    // 連続した空行を注意
+    'no-multiple-empty-lines': [1, { 'max': 1 }],
+    // 関数呼び出しの際のスペースを禁止
+    'no-spaced-func': 2,
+    // シングルクオートを強制
+    'quotes': [2, 'single'],
+    // 厳密等価演算子を強制
+    'eqeqeq': 2,
+    // ドット記法以外（ブランケット記法）を許可
+    'dot-notation': 0,
+    // strict 強制を緩和
+    'strict': 0,
+    // 末尾セミコロンを強制
+    'semi': [2, 'always'],
+    // 再代入がない限り const を強制
+    'prefer-const': 2,
+    // カンマ位置は末尾に強制
+    'comma-style': [2, 'last'],
+    // カンマ前後のスペースを許可（垂直方向に統一されたインデントを得るため）
+    'comma-spacing': 0,
+    // Key:Value におけるコロン前スペースなし、コロン後1スペースを強制
+    // ただし垂直方向にコロン記号を揃えるためのコロン前スペースを認める
+    'key-spacing': [2, {
+      'beforeColon': false,
+      'afterColon': true,
+      'align': 'colon'
+    }],
+
+    // ブロック開始前のスペースを強制
+    'space-before-blocks': 2,
+
+    'jsx-a11y/no-static-element-interactions': 0,
+    'jsx-a11y/href-no-hash': 0,
+    'jsx-a11y/label-has-for': 0
+  },
+
+  'ecmaFeatures': {
+    'modules': true,
+    'jsx': true,
+    'experimentalObjectRestSpread': true
+  },
+
+  'env': {
+    'es6': true,
+    'node': true,
+    'jasmine': true,
+    'browser': true
+  },
+
+  'globals': {
+    'localStorage': true
+  }
+}

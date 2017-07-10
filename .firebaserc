@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "pta-investment-management",
+    "pta-service": "pta-investment-management"
+  }
+}

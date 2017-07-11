@@ -100,6 +100,7 @@ module.exports = (options) => {
       'inline'            : true,
       'progress'          : true,
       'historyApiFallback': true,
+      'open'              : true,
     };
   }
 

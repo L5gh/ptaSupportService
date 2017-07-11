@@ -104,6 +104,13 @@ class App extends Component {
               className="divider"
             />
             <li>
+              <Link to="/sendContact"> 連絡事項登録</Link>
+            </li>
+            <li
+              role="separator"
+              className="divider"
+            />
+            <li>
               <Link to="/contact"> 連絡事項</Link>
             </li>
             <li

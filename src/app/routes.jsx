@@ -10,6 +10,7 @@ import UserProfile from './components/user/profile';
 import ResetPassword from './components/user/reset_password';
 import requireAuth from './utils/authenticated';
 import firstContact from './components/first/contact';
+import sendContact from './components/first/sendContact';
 
 export default (
   <Route
@@ -43,6 +44,11 @@ export default (
       component={firstContact}
       onEnter={requireAuth}
       />
+    <Route
+      path="/sendContact"
+      component={sendContact}
+      onEnter={requireAuth}
+        />
   </Route>
 
 );

@@ -67,10 +67,13 @@ class sendContact extends Component {
     });
   }
 
+  // カテゴリーのチェックボッスクがON/OFFされた場合の処理
   categoryChangeSelection = (targetId) => {
     const nextCate = this.state.cate.map((d) => {
-      if (d.index === targetId.currentTarget.id ) {
+      // 押されたチェックボックスのid（index)と一致した場合
+      if (d.index === targetId.currentTarget.id) {
         const nextGe = this.state.grade.map((data) => {
+          // gradeデータのhlと押されたチェックボックスのvalue(hl)が一致している場合
           if (data.hl === targetId.currentTarget.value ) {
             return{
               index   : data.index,
@@ -78,6 +81,7 @@ class sendContact extends Component {
               hl      : data.hl,
               selected: targetId.currentTarget.checked
             };
+          // 押されたチェックボックスのvalue(hl)が''(null)があった場合
           } else if (targetId.currentTarget.value === '' ) {
             return {
               index   : data.index,
@@ -95,18 +99,26 @@ class sendContact extends Component {
           }
         });
         this.setState({grade: nextGe});
+        if (d.hl === 'low' || d.hl === '') {
+          this.setState({lowCheckCount: !d.selected === true ? 3 :0 });
+        } else if (d.hl === 'high' || d.hl === '') {
+          this.setState({highCheckCount: !d.selected === true ? 3 :0 });
+        }
         return{
           index   : d.index,
           label   : d.label,
           hl      : d.hl,
           selected: !d.selected
         };
-      } else if (targetId.currentTarget.value === '' ) {
-        return {
+      // 全チェックボックスの操作時の処理
+      } else if (targetId.currentTarget.value === '') {
+        this.setState({lowCheckCount: !d.selected === true ? 3 :0 });
+        this.setState({highCheckCount: !d.selected === true ? 3 :0 });
+        return{
           index   : d.index,
           label   : d.label,
           hl      : d.hl,
-          selected: targetId.currentTarget.checked
+          selected: !d.selected
         };
       } else {
         return {
@@ -157,105 +169,10 @@ class sendContact extends Component {
     }
   }
 
-    // // gradeをON/OFFした時のカテゴリーの制御
-    // const lowNumber = 3;
-    // const highNumber = 3;
-    // if (this.state.lowCheckCount === lowNumber) {
-    //   const lowCheckAll = this.state.cate.map((c) => {
-    //     if (c.hl === 'low' ) {
-    //       return {
-    //         index   : c.index,
-    //         label   : c.label,
-    //         hl      : c.hl,
-    //         selected: true
-    //       };
-    //     } else {
-    //       return{
-    //         index   : c.index,
-    //         label   : c.label,
-    //         hl      : c.hl,
-    //         selected: c.selected
-    //       };
-    //     }
-    //   });
-    //   this.setState({cate: lowCheckAll});
-    // } else {
-    //   const lowCheckNotAll = this.state.cate.map((n) => {
-    //     if (n.hl === 'low' ) {
-    //       return {
-    //         index   : n.index,
-    //         label   : n.label,
-    //         hl      : n.hl,
-    //         selected: false
-    //       };
-    //     } else {
-    //       return{
-    //         index   : n.index,
-    //         label   : n.label,
-    //         hl      : n.hl,
-    //         selected: n.selected
-    //       };
-    //     }
-    //   });
-    //   this.setState({cate: lowCheckNotAll});
-  //   }
-  // }
-
   render() {
     const lowNumber = 3;
     const highNumber = 3;
-    if (this.state.lowCheckCount === lowNumber) {
-      const lowCheckAll = this.state.cate.map((c) => {
-        if (c.hl === 'low' ) {
-          return {
-            index   : c.index,
-            label   : c.label,
-            hl      : c.hl,
-            selected: true
-          };
-        } else {
-          return{
-            index   : c.index,
-            label   : c.label,
-            hl      : c.hl,
-            selected: c.selected
-          };
-        }
-      });
-      this.setState({cate: lowCheckAll});
-    } else {
-      const lowCheckNotAll = this.state.cate.map((n) => {
-        if (n.hl === 'low' ) {
-          return {
-            index   : n.index,
-            label   : n.label,
-            hl      : n.hl,
-            selected: false
-          };
-        } else {
-          return{
-            index   : n.index,
-            label   : n.label,
-            hl      : n.hl,
-            selected: n.selected
-          };
-        }
-      });
-      this.setState({cate: lowCheckNotAll});
-    }
-    const catelist = this.state.cate.map(cate => {
-      return (
-        <div key={ cate.index } className="checkbox-inline">
-          <input
-            id={cate.index}
-            type="checkbox"
-            onChange={this.categoryChangeSelection.bind(this)}
-            checked={cate.selected}
-            value={cate.hl}
-          >{cate.label}</input>
-        </div>
-      );
-    });
+
     const gradelist = this.state.grade.map(g => {
       return (
         <div key={ g.index } className="checkbox-inline">
@@ -268,6 +185,41 @@ class sendContact extends Component {
         </div>
       );
     });
+
+    const highCheckflag = (this.state.highCheckCount === highNumber ? true : false);
+    const lowCheckflag = (this.state.lowCheckCount === lowNumber ? true : false);
+    const catelist = this.state.cate.map(cate => {
+      if(
+          (lowCheckflag && cate.hl === 'low') ||
+          (highCheckflag && cate.hl === 'high') ||
+          (lowCheckflag && highCheckflag)
+      ) {
+        return (
+          <div key={ cate.index } className="checkbox-inline">
+            <input
+              id={cate.index}
+              type="checkbox"
+              onChange={this.categoryChangeSelection.bind(this)}
+              checked={true}
+              value={cate.hl}
+            >{cate.label}</input>
+          </div>
+        );
+      } else {
+        return (
+          <div key={ cate.index } className="checkbox-inline">
+            <input
+              id={cate.index}
+              type="checkbox"
+              onChange={this.categoryChangeSelection.bind(this)}
+              checked={cate.selected}
+              value={cate.hl}
+            >{cate.label}</input>
+          </div>
+        );
+      }
+    });
+
     return(
       <div className="container">
         <form>

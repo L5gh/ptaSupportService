@@ -7,11 +7,11 @@ class sendContact extends Component {
     super(props);
     this.dataChangeSelection = this.dataChangeSelection.bind(this);
     this.state = {
-      grade     : [],
-      All       : [],
-      checkCount: 0
+      grade: [],
+      cate : []
     };
-    this.count = 0;
+    this.lowCheckCount = 0;
+    this.highCheckCount = 0;
   }
 
   componentDidMount = () => {
@@ -48,10 +48,18 @@ class sendContact extends Component {
           selected: false,
         }
       ],
-      All: [
+      cate: [
         { index   : '10',
           label   : '全学年',
-          hl      : '',
+          hl      : 'All',
+          selected: false },
+        { index   : '11',
+          label   : '低学年',
+          hl      : 'lowAll',
+          selected: false },
+        { index   : '12',
+          label   : '高学年',
+          hl      : 'highAll',
           selected: false }
       ]
     });
@@ -59,23 +67,7 @@ class sendContact extends Component {
 
   // チェックボッスクがON/OFFされた場合の処理
   dataChangeSelection = (targetId) => {
-    const checkAll = this.state.All.map(d => {
-      if (d.index === targetId.currentTarget.id) {
-        return {
-          index   : d.index,
-          label   : d.label,
-          hl      : d.hl,
-          selected: !d.selected
-        };
-      }else{
-        return{
-          index   : d.index,
-          label   : d.label,
-          hl      : d.hl,
-          selected: d.selected
-        };
-      }
-    });
+    //1~6年生のチェックボックス処理
     const checkGrade = this.state.grade.map((d) => {
       if (d.index === targetId.currentTarget.id) {
         return {
@@ -85,7 +77,27 @@ class sendContact extends Component {
           selected: !d.selected
         };
         //全学年がON/OFFされた場合の処理
-      } else if (targetId.currentTarget.value === '') {
+      } else if (targetId.currentTarget.value === 'All') {
+        return {
+          index   : d.index,
+          label   : d.label,
+          hl      : d.hl,
+          selected: targetId.currentTarget.checked
+        };
+        //高学年がON/OFFされた場合の処理
+      } else if (targetId.currentTarget.value === 'highAll'
+        && d.hl === 'high'
+      ) {
+        return {
+          index   : d.index,
+          label   : d.label,
+          hl      : d.hl,
+          selected: targetId.currentTarget.checked
+        };
+        //低学年がON／OFFされた場合の処理
+      } else if (targetId.currentTarget.value === 'lowAll'
+        && d.hl === 'low'
+      ) {
         return {
           index   : d.index,
           label   : d.label,
@@ -101,24 +113,47 @@ class sendContact extends Component {
         };
       }
     });
-    //1~6年生全てがチェックされた時
-    this.count = 0;
+
+    this.lowCheckCount = 0; //1~3年生のチェックONの数
+    this.highCheckCount = 0; //4~6年生のチェックONの数
+//1~3,4~6年生のチェックON数のカウント
     checkGrade.map(data => {
-      if(data.selected === true) {
-        this.count = this.count + 1;
+      if(data.selected === true && data.hl === 'high') {
+        this.highCheckCount = this.highCheckCount + 1;
+      } else if (data.selected === true && data.hl === 'low') {
+        this.lowCheckCount = this.lowCheckCount + 1;
       }
     });
-    console.log('count:'+this.count);
-
-    const AllData = this.state.All.map(d => {
-      if (this.count === 6) {
+//全、高、低学年のチェックボックス処理
+    const cateData = this.state.cate.map(d => {
+      const lowGradeNumber = 3;
+      const highGradeNumber = 3;
+      if (this.lowCheckCount === lowGradeNumber
+        && d.hl === 'lowAll') {
         return {
           index   : d.index,
           label   : d.label,
           hl      : d.hl,
           selected: true
         };
-      }else{
+      } else if (this.highCheckCount === highGradeNumber
+        && d.hl === 'highAll') {
+        return{
+          index   : d.index,
+          label   : d.label,
+          hl      : d.hl,
+          selected: true
+        };
+      } else if ( this.lowCheckCount === lowGradeNumber
+        && this.highCheckCount === highGradeNumber
+        && d.hl === 'All') {
+        return{
+          index   : d.index,
+          label   : d.label,
+          hl      : d.hl,
+          selected: true
+        };
+      } else {
         return{
           index   : d.index,
           label   : d.label,
@@ -127,14 +162,12 @@ class sendContact extends Component {
         };
       }
     });
-
     this.setState({grade: checkGrade});
-    this.setState({All: checkAll});
-    this.setState({All: AllData});
+    this.setState({cate: cateData});
   };
 
   render() {
-    const nextAll = this.state.All.map((data) => {
+    const nextCate = this.state.cate.map((data) => {
       return (
         <div key={ data.index } className="checkbox-inline">
           <input
@@ -185,7 +218,7 @@ class sendContact extends Component {
           </div>
           <div className="col-xs-12"></div>
           <div className="form-group col-xs-12">
-            {nextAll}
+            {nextCate}
             {nextGrade}
           </div>
           <div className="col-xs-12"></div>
